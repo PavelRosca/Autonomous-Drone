@@ -169,16 +169,16 @@ class OffboardControl(Node):
             new_y = y + side_step * math.cos(self.yaw)
             new_z = wz
             #self.get_logger().info(f"Ocolesc pe DREAPTA {min_left:.2f}")
-        elif (max_left == max_right):
-            new_x = x
-            if min_left >= min_right:
-                new_y = y + side_step * math.sin(self.yaw)
-            else:
-                new_y = y - side_step * math.sin(self.yaw)
+        # elif (max_left == max_right):
+        #     new_x = x
+        #     if min_left >= min_right:
+        #         new_y = y + side_step * math.sin(self.yaw)
+        #     else:
+        #         new_y = y - side_step * math.sin(self.yaw)
 
-            new_z = wz
-            self.yaw = self.yaw
-            #self.get_logger().info(f"Ocolesc pe STANGA {min_right:.2f}")
+        #     new_z = wz
+        #     self.yaw = self.yaw
+        #     #self.get_logger().info(f"Ocolesc pe STANGA {min_right:.2f}")
         else:
             new_x = x 
             new_y = y
