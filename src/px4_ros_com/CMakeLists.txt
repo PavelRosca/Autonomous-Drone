@@ -125,6 +125,14 @@ install(PROGRAMS
   src/examples/offboard_py/YOLO_person_detector.py
   src/examples/offboard_py/Cartography.py
   src/examples/offboard_py/Main.py
+
+  src/examples/offboard_py/TestingSolar.py
+  src/examples/offboard_py/GimbalControl.py
+  src/examples/offboard_py/GimbalPresets.py
+  src/examples/offboard_py/GimbalTester.py
+  src/examples/offboard_py/KeyboardController.py
+  src/examples/offboard_py/OffboardControlWithGimbal.py
+
   DESTINATION lib/${PROJECT_NAME}
 
 )

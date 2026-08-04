@@ -1,0 +1,29 @@
+# PX4 Typhoon H480 Control - Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ROS2 core (usually pre-installed)
+# rclpy
+# rclpy-message-converter
+
+# Drone & Control
+# px4_msgs  # Already installed in your workspace
+
+# UI & Input
+keyboard>=0.13.5          # Keyboard input reading
+# May require elevated privileges on Linux
+
+# Computer Vision (Optional but recommended)
+ultralytics>=8.0.0        # YOLO detection (for AI tracking)
+opencv-python>=4.8.0      # Video processing
+numpy>=1.24.0             # Numerical operations
+
+# GStreamer (for video streaming)
+# PyGObject>=3.40.0       # GStreamer bindings
+# Note: May need system packages: libgstreamer1.0-dev, gstreamer1.0-plugins-base
+
+# Networking & Communication
+# rosgraph-msgs
+# builtin-interfaces
+
+# Utilities
+# colorama>=0.4.6         # Terminal colors (optional)

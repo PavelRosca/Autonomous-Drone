@@ -1,0 +1,175 @@
+# 🚀 Quick Start - PX4 Typhoon H480 Control
+
+## Pas 1: Instalare Dependințe (Prima oară)
+
+```bash
+# Deschide terminal
+cd ~/ws_ros2
+
+# Instalează librării Python
+pip install keyboard ultralytics opencv-python numpy rclpy
+
+# Build ROS2
+colcon build
+
+# Activează environment
+source install/setup.bash
+```
+
+## Pas 2: Pornire PX4 Simulation (Gazebo)
+
+```bash
+# Terminal 1 - PX4 SITL
+cd ~/PX4-Autopilot
+make px4_sitl gazebo-classic
+
+# Lasă-l să ruleze... va arăta:
+# [init] Loading airframe...
+# [init] simulation started
+```
+
+## Pas 3: Pornire ROS2 Bridge (dacă e necesar)
+
+```bash
+# Terminal 2 - MicroRTPS Agent
+# Verifică dacă e deja pornit:
+ps aux | grep micrortps_agent
+
+# Dacă nu e:
+cd ~/PX4-Autopilot
+./build/px4_sitl_default/bin/micrortps_agent -t UDP
+```
+
+## Pas 4: Pornire Control Nodes
+
+```bash
+# Terminal 3 - Main control node
+cd ~/ws_ros2
+source install/setup.bash
+python3 src/px4_ros_com/src/examples/offboard_py/OffboardControlWithGimbal.py
+```
+
+## Pas 5: Pornire Keyboard Controller
+
+```bash
+# Terminal 4 - Keyboard input
+cd ~/ws_ros2
+source install/setup.bash
+python3 src/px4_ros_com/src/examples/offboard_py/KeyboardController.py
+
+# Vei vedea help text cu comenzi
+```
+
+## Pas 6: Control Drona
+
+În terminal 4 (după ce KeyboardController a pornit):
+
+```
+Comenzi:
+┌─ GIMBAL (Camera) ─────────────────┐
+│ ↑ / ↓      = Tilt sus/jos         │
+│ ← / →      = Pan stânga/dreapta   │
+│ , / .      = Rotație stânga/dreapta
+│ C          = Center gimbal        │
+│ V          = Straight down        │
+└──────────────────────────────────┘
+
+┌─ DRONE ───────────────────────────┐
+│ W / A / S / D = Forward/Left/Back/Right
+│ Space / X     = Up / Down         │
+│ Q / E         = Yaw drona         │
+│ T             = Arm               │
+│ O             = Offboard Mode     │
+│ L             = Land              │
+│ Y             = Disarm            │
+│ ESC           = Exit              │
+└──────────────────────────────────┘
+```
+
+### Secvență Control Tipic:
+
+1. **Apasă `T`** → Arm (motoare pornesc)
+2. **Apasă `O`** → Offboard Mode (control manual activat)
+3. **Apasă `Space`** → Up (drona urcă)
+4. **Apasă `↑`** → Gimbal tilt up
+5. **Apasă `W`** → Forward
+6. **Apasă `L`** → Land
+7. **Apasă `Y`** → Disarm
+
+---
+
+## ⚙️ Debugging Commands
+
+```bash
+# Vezi ce topics sunt active:
+ros2 topic list
+
+# Vezi mesaje gimbal live:
+ros2 topic echo /gimbal_control
+
+# Track viteză drona:
+ros2 topic echo /fmu/out/vehicle_local_position
+
+# Test gimbal rapid:
+cd ~/ws_ros2 && python3 src/px4_ros_com/src/examples/offboard_py/GimbalTester.py
+```
+
+---
+
+## 🆘 Probleme & Soluții
+
+| Problemă | Soluție |
+|----------|---------|
+| "keyboard not found" | `pip install keyboard --upgrade` |
+| "No topic /fmu/*" | MicroRTPS Agent nu rulează - check Pas 3 |
+| Gimbal nu se mișcă | Verifică drona e în offboard mode (`ros2 topic pub /drone_string_command std_msgs/String '{data: "OFFBOARD"}'`) |
+| Tastatură nu funcționează | Rulează cu elevated: `sudo python3 KeyboardController.py` |
+
+---
+
+## 📹 Test Gimbal Rapid
+
+```bash
+# Quick test fără control full:
+cd ~/ws_ros2
+source install/setup.bash
+python3 src/px4_ros_com/src/examples/offboard_py/GimbalTester.py
+
+# Va trimite comenzi gimbal în secvență:
+# - Center (neutrq)
+# - Straight Down (-90°)
+# - Pan Left
+# - Pan Right
+# - Yaw Left/Right
+# - Look Ahead
+```
+
+---
+
+## 🎯 Pași Viitori
+
+1. **Test cu mai mulți waypoints** - Edit `clicked_waypoints`
+2. **Integrare YOLO detection** - Trackare automată persoane
+3. **Custom gimbal modes** - Introdu logică specifyă
+4. **Hardware real** - Transfer din SITL pe Typhoon fizic
+
+---
+
+## ✅ Checklist Pun Drona în Aer
+
+- [ ] PX4 SITL rulează (Gazebo)
+- [ ] MicroRTPS Agent activ
+- [ ] Nodes ROS2 pornite
+- [ ] KeyboardController cere input
+- [ ] (T) Arm - motoare pornesc în Gazebo
+- [ ] (O) Offboard - control manual disponibil
+- [ ] (Space) Up - drona urcă
+- [ ] (L) Land - drona coboară
+
+Gata! 🎉 Poți controla drona și gimbal cameră!
+
+---
+
+**Versiune**: 1.0  
+**Testat cu**: PX4 v1.14, Gazebo, ROS2 Humble, Typhoon H480  
+**Status**: ✅ Ready to Use
